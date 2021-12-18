@@ -20,7 +20,7 @@ public:
 	virtual void Print() = 0;
 	void LoadData();
 	void LoadBackGround();
-	void UpdateEvents();
+	int UpdateEvents();
 	void HandlePipes(float deltaTime, Bird* bird);
 
 protected:

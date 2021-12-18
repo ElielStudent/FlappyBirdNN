@@ -4,11 +4,13 @@
 
 class AiGame : public Game {
 public:
-	AiGame(string baseFile = "0",string saveFile = "0");
+	AiGame(string loadFile = "0",string saveFile = "0");
 	void Init();
 	void Print();
 	void Update(float deltaTime);
 	void Restart();
+	void SaveBird(AiBird* bird);
+	AiBird* LoadBird();
 private:
 	AiBird* lastBestBird;
 	AiBird* BestBird;
@@ -17,7 +19,6 @@ private:
 	AiBird** birds;
 	int countDead = 0;
 	int generation = 0;
-	string baseFile,saveFile;
-
+	string loadFile,saveFile;
 };
 

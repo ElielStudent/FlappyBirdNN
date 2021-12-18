@@ -1,6 +1,6 @@
 #include "AiBird.h"
 
-AiBird::~AiBird(){
+AiBird::~AiBird() {
 	delete network;
 }
 
@@ -10,6 +10,14 @@ AiBird::AiBird(sf::Texture& birdTex, float scale) :Bird(birdTex, scale) {
 
 AiBird::AiBird(sf::Texture& birdTex, float scale, AiBird* base, int mPer) : Bird(birdTex, scale) {
 	this->network = new NeuralNetwork(base->network, mPer);
+}
+
+AiBird::AiBird(sf::Texture& birdTex, float scale, string loadFile) : Bird(birdTex, scale) {
+	this->network = new NeuralNetwork(loadFile);
+}
+
+void AiBird::SaveBird(string saveFile) {
+	network->saveNetwork(saveFile);
 }
 
 bool AiBird::IsJumping(Pipe* nextPipe) {
@@ -28,5 +36,4 @@ bool AiBird::IsJumping(Pipe* nextPipe) {
 		((ScreenH / 2) - PipeDis) / scale,
 		(ScreenW - birdSprite.getPosition().x) / scale };
 	return network->Calculate(AiInput);
-
 }

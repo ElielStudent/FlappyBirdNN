@@ -1,4 +1,5 @@
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -17,7 +18,9 @@ class NeuralNetwork {
 public:
 	NeuralNetwork();
 	NeuralNetwork(NeuralNetwork* base, int mPer);
+	NeuralNetwork(string loadFile);
 	bool Calculate(double* input);
+	void saveNetwork(string saveFile);
 private:
 	vector<double> layers[NumOfHiddenLayers + 2];
 	vector<double> bias[NumOfHiddenLayers + 1];

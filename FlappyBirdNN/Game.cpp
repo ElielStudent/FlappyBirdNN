@@ -42,12 +42,15 @@ void Game::LoadBackGround() {
 	ScoreTxt.setOrigin(ScoreTxt.getLocalBounds().width / 2, 0);
 }
 
-void Game::UpdateEvents() {
+int Game::UpdateEvents() {
 	sf::Event event;
 	while (window->pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed)
 			window->close();
+		if (event.type == sf::Event::KeyReleased)
+			if (event.key.code == sf::Keyboard::Space)
+				return 1;
 	}
 }
 

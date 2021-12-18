@@ -100,4 +100,9 @@
       <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bird0.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

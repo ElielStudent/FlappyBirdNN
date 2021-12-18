@@ -52,6 +52,9 @@
   <ItemGroup>
     <Font Include="arial.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bird0.dat" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{c70e81e6-34e8-4a06-8b16-c078c5a48692}</ProjectGuid>
