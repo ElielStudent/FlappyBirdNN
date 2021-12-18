@@ -41,11 +41,10 @@ bool Bird::IsCollided(Pipe* nextPipe)
 		return pos.y + r * 0.7 > nextPipe->getH() ||
 			pos.y - r * 0.7 < nextPipe->getH() - nextPipe->GetDis();
 	}
-	return pos.y > GroundY* birdSprite.getScale().x;
+	return pos.y > GroundY* birdSprite.getScale().x || pos.y < 0;
 
 }
 
-bool Bird::PassedPipe(Pipe& pipe)
-{
+bool Bird::PassedPipe(Pipe& pipe){
 	return pipe.GetEndPosition() < birdSprite.getPosition().x - r;
 }

@@ -1,7 +1,16 @@
 #include "AiBird.h"
 
+AiBird::~AiBird(){
+	delete network;
+}
+
 AiBird::AiBird(sf::Texture& birdTex, float scale) :Bird(birdTex, scale) {
 	network = new NeuralNetwork();
+}
+
+AiBird::AiBird(sf::Texture& birdTex, float scale, AiBird* base, int mPer) : Bird(birdTex, scale) {
+	NeuralNetwork* baseNetwork = base->network;
+	this->network = new NeuralNetwork(baseNetwork, mPer);
 }
 
 bool AiBird::IsJumping(Pipe* nextPipe) {

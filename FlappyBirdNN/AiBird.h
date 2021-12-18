@@ -3,6 +3,7 @@
 #include "NeuralNetwork.h"
 class AiBird : public Bird{
 public:
+    ~AiBird();
     AiBird(sf::Texture& birdTex, float scale);
     AiBird(sf::Texture& birdTex, float scale,AiBird* base,int mPer);
 private:

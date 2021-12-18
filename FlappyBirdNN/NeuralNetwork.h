@@ -18,7 +18,6 @@ public:
 	NeuralNetwork();
 	NeuralNetwork(NeuralNetwork* base, int mPer);
 	bool Calculate(double* input);
-
 private:
 	vector<double> layers[NumOfHiddenLayers + 2];
 	vector<double> bias[NumOfHiddenLayers + 1];

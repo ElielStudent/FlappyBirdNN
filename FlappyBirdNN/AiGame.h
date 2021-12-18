@@ -8,7 +8,12 @@ public:
 	void Init();
 	void Print();
 	void Update(float deltaTime);
+	void Restart();
 private:
+	AiBird* lastBestBird;
+	AiBird* BestBird;
+	AiBird* SecondBestBird;
+	AiBird* ThirdBestBird;
 	AiBird** birds;
 	int countDead = 0;
 	string baseFile,saveFile;

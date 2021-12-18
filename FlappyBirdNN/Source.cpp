@@ -3,8 +3,7 @@
 #include "UserGame.h"
 #include "AiGame.h"
 
-int main()
-{
+int main(){
     Game* game = new AiGame();
     game->Start();
 }

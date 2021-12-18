@@ -3,6 +3,10 @@
 AiGame::AiGame(string baseFile, string saveFile){
 	this->baseFile = baseFile;
 	this->saveFile = saveFile;
+	lastBestBird = NULL;
+	BestBird = NULL;
+	SecondBestBird = NULL;
+	ThirdBestBird = NULL;
 }
 
 void AiGame::Init(){
@@ -55,23 +59,53 @@ void AiGame::Update(float deltaTime){
 
 			if (birds[i]->Died()) {
 				countDead++;
+				if (NumOfAiBirds - countDead == 2) {
+					if (ThirdBestBird != NULL)
+						delete ThirdBestBird;
+					ThirdBestBird = new AiBird(birdTex, scale, birds[i], 0);
+				}
+				if (NumOfAiBirds - countDead == 1) {
+					if (SecondBestBird != NULL)
+						delete SecondBestBird;
+					SecondBestBird = new AiBird(birdTex, scale, birds[i], 0);
+				}
 				if (countDead == NumOfAiBirds) {
-					//mutate
-					//restart
-					for (int i = 0; i < NumOfAiBirds; i++) {
-						delete birds[i];
-						birds[i] = new AiBird(birdTex,scale);
-					}
-					beforePipe.clear();
-					afterPipe.clear();
-					timeFromPipes = StartSpawnRate;
-					score = 0;
-					ScoreTxt.setString("0");
-					ScoreTxt.setOrigin(ScoreTxt.getLocalBounds().width / 2, 0);
-					countDead = 0;
-
+					if (BestBird != NULL)
+						delete BestBird;
+					BestBird = new AiBird(birdTex, scale, birds[i], 0);
+					Restart();
 				}
 			}
 		}
 	}
+}
+
+void AiGame::Restart(){
+	int birdChance; 
+	if (lastBestBird == NULL) {
+		lastBestBird = new AiBird(birdTex, scale, BestBird, 0);
+	}
+	for (int i = 0; i < NumOfAiBirds; i++) {
+		delete birds[i];
+		birdChance = rand() % 101;
+		if (birdChance <= 10)
+			birds[i] = new AiBird(birdTex, scale,ThirdBestBird,MutationPerc);
+		else if (birdChance <= 30)
+			birds[i] = new AiBird(birdTex, scale, SecondBestBird, MutationPerc);
+		else if (birdChance <= 70)
+			birds[i] = new AiBird(birdTex, scale, BestBird, MutationPerc);
+		else // (birdChance <= 100)
+			birds[i] = new AiBird(birdTex, scale, lastBestBird, MutationPerc);
+	}
+	
+	delete lastBestBird;
+	lastBestBird = new AiBird(birdTex, scale, BestBird, 0);
+
+	beforePipe.clear();
+	afterPipe.clear();
+	timeFromPipes = StartSpawnRate;
+	score = 0;
+	ScoreTxt.setString("0");
+	ScoreTxt.setOrigin(ScoreTxt.getLocalBounds().width / 2, 0);
+	countDead = 0;
 }

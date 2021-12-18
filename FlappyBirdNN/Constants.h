@@ -12,7 +12,8 @@
 #define PipeSpawnRateInc 0.03f
 #define MinSpawnRate 2.0f
 #define BaseSpeed 150
-#define NumOfAiBirds 25
+#define NumOfAiBirds 100
+#define MutationPerc 0.1
 #define GroundPic "Ground.png"
 #define BackGroundPic "background-day.png"
 #define BirdPic "Fbird.png"

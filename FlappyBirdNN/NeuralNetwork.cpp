@@ -1,7 +1,7 @@
 #include "NeuralNetwork.h"
 
 double inline getRand() {
-	return (rand() % 2001 - 1000.0) / 1000.0;
+	return ((rand() % 2001) - 1000.0) / 1000.0;
 }
 
 void RandMat(int n, int m, double* matrix) {
@@ -17,8 +17,7 @@ double activationFunc(double x) {
 	//return x / (1 + abs(x));			//Fast sigmoid
 }
 
-NeuralNetwork::NeuralNetwork()
-{
+NeuralNetwork::NeuralNetwork(){
 	layers[0].resize(NumOfNodesInInput);
 	layers[NumOfHiddenLayers + 1].resize(NumOfNodesInOutput);
 	bias[NumOfHiddenLayers].resize(NumOfNodesInOutput);
@@ -39,8 +38,40 @@ NeuralNetwork::NeuralNetwork()
 }
 
 NeuralNetwork::NeuralNetwork(NeuralNetwork* base, int mPer) {
+	layers[0].resize(NumOfNodesInInput);
+	layers[NumOfHiddenLayers + 1].resize(NumOfNodesInOutput);
+	bias[NumOfHiddenLayers].resize(NumOfNodesInOutput);
 
+	for (int i = 1; i <= NumOfHiddenLayers; i++) {
+		layers[i].resize(NumOfNodesInHidden);
+		bias[i - 1].resize(NumOfNodesInHidden);
+	}
+
+	bias->assign(base->bias->begin(), base->bias->end());
+
+	for (int i = 0; i < NumOfNodesInHidden; i++) {
+		for (int j = 0; j < NumOfNodesInInput; j++)
+			inputW[i][j] = base->inputW[i][j] +
+			((base->inputW[i][j] * (mPer/100)) * ((rand() % 3) - 1));
+	}
+
+	for (int k = 0; k < NumOfHiddenLayers-1; k++) {
+		for (int i = 0; i < NumOfNodesInHidden; i++) {
+			for (int j = 0; j < NumOfNodesInHidden; j++) {
+				hiddenWs[k][i][j] = base->hiddenWs[k][i][j] +
+					((base->hiddenWs[k][i][j] * (mPer/100)) * ((rand() % 3) - 1));
+			}
+		}
+	}
+
+	for (int i = 0; i < NumOfNodesInOutput; i++) {
+		for (int j = 0; j < NumOfNodesInHidden; j++)
+			outputW[i][j] = base->outputW[i][j] +
+			((base->outputW[i][j] * (mPer/100)) * ((rand() % 3) - 1));
+	}
 }
+
+
 
 bool NeuralNetwork::Calculate(double* input)
 {
@@ -74,5 +105,5 @@ bool NeuralNetwork::Calculate(double* input)
 		layers[NumOfHiddenLayers + 1][i] = activationFunc(layers[NumOfHiddenLayers + 1][i]);		//use the activation function on the layer
 	}
 
-	return layers[NumOfHiddenLayers + 1][0] > layers[NumOfHiddenLayers + 1][1];	
+	return layers[NumOfHiddenLayers + 1][0] > layers[NumOfHiddenLayers + 1][1];
 }

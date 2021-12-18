@@ -1,7 +1,7 @@
 #include "Game.h"
 
 Game::Game() {
-	window = new sf::RenderWindow(sf::VideoMode(ScreenW, ScreenH), "FB");
+	window = new sf::RenderWindow(sf::VideoMode(ScreenW, ScreenH), "Flippy bard");
 }
 
 void Game::Start()
