@@ -50,16 +50,17 @@ NeuralNetwork::NeuralNetwork(NeuralNetwork* base, int mPer) {
 	bias->assign(base->bias->begin(), base->bias->end());
 
 	for (int i = 0; i < NumOfNodesInHidden; i++) {
-		for (int j = 0; j < NumOfNodesInInput; j++)
-			inputW[i][j] = base->inputW[i][j] +
-			((base->inputW[i][j] * (mPer/100)) * ((rand() % 3) - 1));
+		for (int j = 0; j < NumOfNodesInInput; j++) {
+			inputW[i][j] = base->inputW[i][j] + 
+				(getRand() * (mPer/100));
+		}
 	}
 
 	for (int k = 0; k < NumOfHiddenLayers-1; k++) {
 		for (int i = 0; i < NumOfNodesInHidden; i++) {
 			for (int j = 0; j < NumOfNodesInHidden; j++) {
 				hiddenWs[k][i][j] = base->hiddenWs[k][i][j] +
-					((base->hiddenWs[k][i][j] * (mPer/100)) * ((rand() % 3) - 1));
+					(getRand() * (mPer/100));
 			}
 		}
 	}
@@ -67,7 +68,7 @@ NeuralNetwork::NeuralNetwork(NeuralNetwork* base, int mPer) {
 	for (int i = 0; i < NumOfNodesInOutput; i++) {
 		for (int j = 0; j < NumOfNodesInHidden; j++)
 			outputW[i][j] = base->outputW[i][j] +
-			((base->outputW[i][j] * (mPer/100)) * ((rand() % 3) - 1));
+			(getRand() * (mPer/100));
 	}
 }
 

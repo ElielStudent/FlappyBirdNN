@@ -72,6 +72,7 @@ void AiGame::Update(float deltaTime){
 				if (countDead == NumOfAiBirds) {
 					if (BestBird != NULL)
 						delete BestBird;
+					std::cout <<  "Gen " << generation << "| Bird: " << i << std::endl;
 					BestBird = new AiBird(birdTex, scale, birds[i], 0);
 					Restart();
 				}
@@ -85,14 +86,16 @@ void AiGame::Restart(){
 	if (lastBestBird == NULL) {
 		lastBestBird = new AiBird(birdTex, scale, BestBird, 0);
 	}
-	for (int i = 0; i < NumOfAiBirds; i++) {
+	delete birds[0];
+	birds[0] = new AiBird(birdTex, scale, BestBird, 0);
+	for (int i = 1; i < NumOfAiBirds; i++) {
 		delete birds[i];
 		birdChance = rand() % 101;
-		if (birdChance <= 10)
+		if (birdChance <= 5)
 			birds[i] = new AiBird(birdTex, scale,ThirdBestBird,MutationPerc);
-		else if (birdChance <= 30)
+		else if (birdChance <= 15)
 			birds[i] = new AiBird(birdTex, scale, SecondBestBird, MutationPerc);
-		else if (birdChance <= 70)
+		else if (birdChance <= 75)
 			birds[i] = new AiBird(birdTex, scale, BestBird, MutationPerc);
 		else // (birdChance <= 100)
 			birds[i] = new AiBird(birdTex, scale, lastBestBird, MutationPerc);
@@ -108,4 +111,5 @@ void AiGame::Restart(){
 	ScoreTxt.setString("0");
 	ScoreTxt.setOrigin(ScoreTxt.getLocalBounds().width / 2, 0);
 	countDead = 0;
+	generation++;
 }

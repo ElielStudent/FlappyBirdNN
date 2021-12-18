@@ -9,11 +9,11 @@
 #define PipeDis 100
 #define GroundY 400
 #define StartSpawnRate 4
-#define PipeSpawnRateInc 0.03f
-#define MinSpawnRate 2.0f
+#define PipeSpawnRateInc 0.01f
+#define MinSpawnRate 2.5f
 #define BaseSpeed 150
-#define NumOfAiBirds 100
-#define MutationPerc 0.1
+#define NumOfAiBirds 400
+#define MutationPerc 200
 #define GroundPic "Ground.png"
 #define BackGroundPic "background-day.png"
 #define BirdPic "Fbird.png"

@@ -16,6 +16,7 @@ private:
 	AiBird* ThirdBestBird;
 	AiBird** birds;
 	int countDead = 0;
+	int generation = 0;
 	string baseFile,saveFile;
 
 };

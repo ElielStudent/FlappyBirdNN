@@ -9,8 +9,7 @@ AiBird::AiBird(sf::Texture& birdTex, float scale) :Bird(birdTex, scale) {
 }
 
 AiBird::AiBird(sf::Texture& birdTex, float scale, AiBird* base, int mPer) : Bird(birdTex, scale) {
-	NeuralNetwork* baseNetwork = base->network;
-	this->network = new NeuralNetwork(baseNetwork, mPer);
+	this->network = new NeuralNetwork(base->network, mPer);
 }
 
 bool AiBird::IsJumping(Pipe* nextPipe) {
