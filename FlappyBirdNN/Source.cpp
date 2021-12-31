@@ -24,5 +24,4 @@ int main() {
 		Game* game = new AiGame(loadFile, saveFile);
 		game->Start();
 	}
-
 }

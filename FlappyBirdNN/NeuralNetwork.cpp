@@ -8,6 +8,14 @@ int inline getNegative() {
 	return rand() % 2 == 0 ? 1 : -1;
 }
 
+double mutateFuncAdd(double base, int mPer) {
+	return base + (base * (mPer / 100.0) * getNegative());
+}
+
+double mutateFuncMult(double base, int mPer) {
+	return base * (rand() % (mPer * 2 + 1) - mPer + 100.0f) / 100;
+}
+
 void RandMat(int n, int m, double* matrix) {
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
@@ -51,32 +59,34 @@ NeuralNetwork::NeuralNetwork(NeuralNetwork* base, int mPer) {
 		bias[i - 1].resize(NumOfNodesInHidden);
 	}
 
-	bias->assign(base->bias->begin(), base->bias->end());
+	for (int i = 0; i < NumOfHiddenLayers + 1; i++) {
+		int len = base->bias[i].size();
+		for (int j = 0; j < len; j++) {
+			bias[i][j] = base->bias[i][j];
+		}
+	}
 
 	for (int i = 0; i < NumOfNodesInHidden; i++) {
 		for (int j = 0; j < NumOfNodesInInput; j++) {
-			inputW[i][j] = base->inputW[i][j] +
-				(base->inputW[i][j] * (mPer / 100) * getNegative());
+			inputW[i][j] = mutateFuncMult(base->inputW[i][j], mPer);
 		}
 	}
 
 	for (int k = 0; k < NumOfHiddenLayers - 1; k++) {
 		for (int i = 0; i < NumOfNodesInHidden; i++) {
 			for (int j = 0; j < NumOfNodesInHidden; j++) {
-				hiddenWs[k][i][j] = base->hiddenWs[k][i][j] +
-					(base->hiddenWs[k][i][j] * (mPer / 100) * getNegative());
+				hiddenWs[k][i][j] = mutateFuncMult(base->hiddenWs[k][i][j], mPer);
 			}
 		}
 	}
 
 	for (int i = 0; i < NumOfNodesInOutput; i++) {
 		for (int j = 0; j < NumOfNodesInHidden; j++)
-			outputW[i][j] = base->outputW[i][j] +
-			(outputW[i][j] * (mPer / 100) * getNegative());
+			outputW[i][j] = mutateFuncMult(base->outputW[i][j], mPer);
 	}
 }
 
-NeuralNetwork::NeuralNetwork(string loadFile){
+NeuralNetwork::NeuralNetwork(string loadFile) {
 	layers[0].resize(NumOfNodesInInput);
 	layers[NumOfHiddenLayers + 1].resize(NumOfNodesInOutput);
 	bias[NumOfHiddenLayers].resize(NumOfNodesInOutput);
@@ -117,7 +127,7 @@ NeuralNetwork::NeuralNetwork(string loadFile){
 
 
 
-bool NeuralNetwork::Calculate(double* input){
+bool NeuralNetwork::Calculate(double* input) {
 	for (int i = 0; i < NumOfNodesInInput; i++) {
 		layers[0][i] = input[i];							//get input inside the input layer
 	}
@@ -151,32 +161,32 @@ bool NeuralNetwork::Calculate(double* input){
 	return layers[NumOfHiddenLayers + 1][0] > layers[NumOfHiddenLayers + 1][1];
 }
 
-void NeuralNetwork::saveNetwork(string saveFile){
+void NeuralNetwork::saveNetwork(string saveFile) {
 	FILE* file = fopen(saveFile.c_str(), "wb");
 
 	for (int i = 0; i < NumOfHiddenLayers + 1; i++) {
 		for (auto& b : bias[i]) {
-			fwrite(&b,sizeof(double),1,file);
+			fwrite(&b, sizeof(double), 1, file);
 		}
 	}
 
 	for (int i = 0; i < NumOfNodesInHidden; i++) {
 		for (int j = 0; j < NumOfNodesInInput; j++) {
-			fwrite(&inputW[i][j], sizeof(double), 1, file) ;
+			fwrite(&inputW[i][j], sizeof(double), 1, file);
 		}
 	}
 
 	for (int k = 0; k < NumOfHiddenLayers - 1; k++) {
 		for (int i = 0; i < NumOfNodesInHidden; i++) {
 			for (int j = 0; j < NumOfNodesInHidden; j++) {
-				fwrite(&hiddenWs[k][i][j], sizeof(double), 1, file) ;
+				fwrite(&hiddenWs[k][i][j], sizeof(double), 1, file);
 			}
 		}
 	}
 
 	for (int i = 0; i < NumOfNodesInOutput; i++) {
 		for (int j = 0; j < NumOfNodesInHidden; j++)
-			fwrite(&outputW[i][j], sizeof(double), 1, file) ;
+			fwrite(&outputW[i][j], sizeof(double), 1, file);
 	}
 
 	fclose(file);

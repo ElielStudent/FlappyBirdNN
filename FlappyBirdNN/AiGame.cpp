@@ -1,6 +1,6 @@
 #include "AiGame.h"
 
-AiGame::AiGame(string loadFile, string saveFile){
+AiGame::AiGame(string loadFile, string saveFile) {
 	this->loadFile = loadFile;
 	this->saveFile = saveFile;
 	lastBestBird = NULL;
@@ -9,8 +9,8 @@ AiGame::AiGame(string loadFile, string saveFile){
 	ThirdBestBird = NULL;
 }
 
-void AiGame::Init(){
-	birds = new AiBird*[NumOfAiBirds];
+void AiGame::Init() {
+	birds = new AiBird * [NumOfAiBirds];
 
 	for (int i = 0; i < NumOfAiBirds; i++) {
 		if (loadFile != "0") {
@@ -21,20 +21,19 @@ void AiGame::Init(){
 		}
 	}
 
-	while (window->isOpen()){
-		if (UpdateEvents())
-			SaveBird(lastBestBird);
-		float deltaTime = clock.restart().asSeconds();
+	while (window->isOpen()) {
+		UpdateEvents();
+		float deltaTime = clock.restart().asSeconds() * GameSpeed;
 		HandlePipes(deltaTime, birds[0]);
 		Update(deltaTime);
 		Print();
 	}
 }
 
-void AiGame::Print(){
+void AiGame::Print() {
 	window->clear();
 	window->draw(backGround);
-	for (int i = 0; i < NumOfAiBirds; i++){
+	for (int i = 0; i < NumOfAiBirds; i++) {
 		if (!birds[i]->Died())
 			birds[i]->PrintBird(*window);
 	}
@@ -49,11 +48,11 @@ void AiGame::Print(){
 	window->display();
 }
 
-void AiGame::Update(float deltaTime){
+void AiGame::Update(float deltaTime) {
 	for (int i = 0; i < NumOfAiBirds; i++) {
 		if (!birds[i]->Died()) {
 			if (!beforePipe.empty())
-				birds[i]->Update(deltaTime,&beforePipe.front());
+				birds[i]->Update(deltaTime, &beforePipe.front());
 			else
 				birds[i]->Update(deltaTime, NULL);
 
@@ -70,10 +69,15 @@ void AiGame::Update(float deltaTime){
 					SecondBestBird = new AiBird(birdTex, scale, birds[i], 0);
 				}
 				if (countDead == NumOfAiBirds) {
-					if (BestBird != NULL)
+					if (BestBird != NULL) {
+						if (lastBestBird != NULL)
+							delete lastBestBird;
+						lastBestBird = new AiBird(birdTex, scale, BestBird, 0);
 						delete BestBird;
-					std::cout <<  "Gen " << generation <<
-						" | Bird: " << i << 
+					}
+					std::cout << "Gen " << generation <<
+						" | Bird: " << (i <= 1 ?
+							(i == 0 ? "LBB" : "BB") : std::to_string(i).c_str()) <<
 						" | Score: " << score << std::endl;
 					BestBird = new AiBird(birdTex, scale, birds[i], 0);
 					Restart();
@@ -83,10 +87,10 @@ void AiGame::Update(float deltaTime){
 	}
 }
 
-void AiGame::Restart(){
-	if (lastBestBird == NULL) 
+void AiGame::Restart() {
+	if (lastBestBird == NULL)
 		lastBestBird = new AiBird(birdTex, scale, BestBird, 0);
-	
+
 	delete birds[0];
 	birds[0] = new AiBird(birdTex, scale, lastBestBird, 0);
 	delete birds[1];
@@ -96,7 +100,7 @@ void AiGame::Restart(){
 		delete birds[i];
 		int birdChance = rand() % 101;
 		if (birdChance <= 5)
-			birds[i] = new AiBird(birdTex, scale,ThirdBestBird,MutationPerc);
+			birds[i] = new AiBird(birdTex, scale, ThirdBestBird, MutationPerc);
 		else if (birdChance <= 15)
 			birds[i] = new AiBird(birdTex, scale, SecondBestBird, MutationPerc);
 		else if (birdChance <= 75)
@@ -104,9 +108,6 @@ void AiGame::Restart(){
 		else // (birdChance <= 100)
 			birds[i] = new AiBird(birdTex, scale, lastBestBird, MutationPerc);
 	}
-	
-	delete lastBestBird;
-	lastBestBird = new AiBird(birdTex, scale, BestBird, 0);
 
 	beforePipe.clear();
 	afterPipe.clear();
@@ -121,13 +122,13 @@ void AiGame::Restart(){
 	SaveBird(BestBird);
 }
 
-void AiGame::SaveBird(AiBird* bird){
+void AiGame::SaveBird(AiBird* bird) {
 	if (saveFile == "0") return;
 	bird->SaveBird(saveFile);
 }
 
-AiBird* AiGame::LoadBird(){
-	AiBird* bird = new AiBird(birdTex,scale,loadFile);
+AiBird* AiGame::LoadBird() {
+	AiBird* bird = new AiBird(birdTex, scale, loadFile);
 	return bird;
 }
 

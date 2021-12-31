@@ -12,7 +12,7 @@ void Game::Start()
 	srand((unsigned)time(NULL));
 
 	clock.restart();
-	window->setFramerateLimit(BaseFrameLimit);
+	window->setFramerateLimit(BaseFrameLimit*GameSpeed);
 
 	timeFromPipes = StartSpawnRate;
 	timeToSpawn = 0;
@@ -42,15 +42,12 @@ void Game::LoadBackGround() {
 	ScoreTxt.setOrigin(ScoreTxt.getLocalBounds().width / 2, 0);
 }
 
-int Game::UpdateEvents() {
+void Game::UpdateEvents() {
 	sf::Event event;
 	while (window->pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed)
 			window->close();
-		if (event.type == sf::Event::KeyReleased)
-			if (event.key.code == sf::Keyboard::Space)
-				return 1;
 	}
 }
 
